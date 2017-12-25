@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<style type="text/css">
+			*{
+				margin:0; padding: 0;
+			}
+			body{
+				background: url(images/bg.jpg);
+				background-repeat: no-repeat;
+				background-size: cover;
+			}
+			#name{
+				margin:20px auto;
+				width:400px;
+				height: 50px;
+			}
+			.pname{
+				font-size: 20px;
+				background: #d1d3d6;
+				width: 150px;
+				height: 50px;
+				position: relative;
+				display: inline-block;
+				line-height: 50px;
+				text-align: center;
+                border-radius: 3px;
+                color: #ooo;
+			}
+			.vs{
+				font-size: 20px;
+				color: red;
+				position: relative;
+                margin: 0px 15px;
+                display: inline-block;
+
+			}
+			.pkbtn{
+				font-size: 15px;
+				background: #ddd;
+				border-radius: 3px;
+				width: 100px;
+				height: 30px;
+				line-height: 30px;
+				border: 1px solid #000;
+				margin:auto;
+				cursor: pointer;
+				text-align: center;
+				color: #000;
+				
+			}
+			.pkcontent{
+				font-size: 18px;
+				border-radius: 3px width:600px;
+				position: relative;
+				margin:auto;
+				height: 700px;
+				width: 50%;
+				color: #FFF;
+			}
+			.pkcontent p{
+				margin-top: 8px;
+			}
+			.pkcontent p span{
+				color: red;
+			}
+		</style>
+	</head>
+	<body>
+		<div id="name">
+			<div class="pname"></div>
+			<div class="vs">vs</div>
+			<div class="pname"></div>
+		</div>
+		<div class="pkbtn">开始PK</div>
+		<div class="pkcontent"></div>
+	</body>
+	<script type="text/javascript">
+		
+		
+		var nameList = ['刘赤赤','老李头','老王头','小褚','丁梦圆','张国辉','贾长森','刘帅大boss','刘肇'];//创建数组
+		var skList =[  //技能
+		   '使用了还我漂漂拳，打的对手满地找牙，对方损失了',
+		   '使用了大招，对方假发被打掉，对方损失了',
+		   '使用了螺旋手里剑，对方来不及躲，对方损失了',
+		   '使用了葵花宝典，逼格上升41%，对方损失了',
+		   '炫耀了他的大块肌肉，对方损失了',
+		   '狠狠地鄙视了对方一下，造成了巨大的伤害，对方损失',
+		   '使用了情侣花式虐狗秀恩爱一下子打中了对方的小心脏，对方损失了'
+		]
+		var oPerson = document.getElementsByClassName('pname');
+		var index = parseInt(Math.random()*nameList.length);
+		var oContent = document.getElementsByClassName('pkcontent')[0];
+		
+		oPerson[0].innerHTML = nameList[index];  //左
+		nameList.splice(index,1);   //删除下标为index的元素
+		//console.log(nameList);
+		index = parseInt(Math.random()*nameList.length);
+		oPerson[1].innerHTML = nameList[index];  //右
+		
+		var pk = document.getElementsByClassName('pkbtn')[0];
+		pk.onclick = startPk;
+		var times =0;   //定义第几轮攻击
+		var turn =1;  //定义谁来攻击   1为a攻击   -1 则b攻击
+		
+		var isPking = false; //初始化
+		function startPk(){    //封装一个开始pk的函数
+			if(isPking)return'正在pk请勿打扰';
+				isPking = true;   //真正pk了
+			
+			oPerson[0].hp = 100;
+			oPerson[1].hp = 100;
+			
+			var timer = setInterval(fight,1000);
+			function fight(){
+			    times++;
+			    var demage = parseInt(Math.random()*30+1);
+			    var kill = skList[parseInt(Math.random()*skList.length)];
+				var oP = document.createElement('p')  //创建元素p
+				if(turn>0){
+					oP.innerHTML = "第"+times+"轮攻击:【"+oPerson[0].innerHTML+"】"+kill+"<span>"+demage+"</span>点血量";
+				    oPerson[1].hp-=demage;
+				}
+				else{
+				    oP.innerHTML = "第"+times+"轮攻击:【"+oPerson[1].innerHTML+"】"+kill+"<span>"+demage+"</span>点血量";
+				    oPerson[0].hp-=demage;
+				}
+				
+				oContent.appendChild(oP);   //往octent添加一个子节点
+				turn *=-1;
+				if(oPerson[1].hp<=0 || oPerson[0].hp<=0){
+					clearInterval(timer);  //清楚定时器
+					var over =document.createElement('p');
+					over.style.color = 'red';
+					over.innerHTML = (oPerson[1].hp<=0?oPerson[1].innerHTML:oPerson[0].innerHTML)+'挂掉了！';
+					oContent.appendChild(over);  
+				}
+			}
+		 }
+		
+	</script>
+</html>
